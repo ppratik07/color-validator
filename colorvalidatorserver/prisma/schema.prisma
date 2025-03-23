@@ -12,3 +12,23 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model BrandProfile {
+  id        String   @id @default(uuid())
+  name      String
+  tolerance Float    @default(3.0)
+  colors    Color[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Color{
+id        String  @id @default(uuid())
+name      String
+hex       String
+r         Int
+g         Int
+b         Int
+profileId String
+profile   BrandProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
