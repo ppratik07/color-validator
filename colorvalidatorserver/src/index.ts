@@ -56,3 +56,9 @@ app.put('/profiles/:id', async (req, res) => {
       res.status(400).json({ error: 'Failed to delete profile' });
     }
   });
+
+  //get all profile
+  app.get('/profiles', async (req, res) => {
+    const profiles = await prisma.brandProfile.findMany({ include: { colors: true } });
+    res.json(profiles);
+  });
