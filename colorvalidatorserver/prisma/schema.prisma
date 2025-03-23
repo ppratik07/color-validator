@@ -31,4 +31,5 @@ g         Int
 b         Int
 profileId String
 profile   BrandProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+createdAt  DateTime @default(now())
 }
