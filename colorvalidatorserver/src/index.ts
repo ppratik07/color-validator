@@ -46,3 +46,13 @@ app.put('/profiles/:id', async (req, res) => {
       res.status(400).json({ error: 'Failed to update profile' });
     }
   });
+  //deleting profile
+  app.delete('/profiles/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+      await prisma.brandProfile.delete({ where: { id } });
+      res.json({ message: 'Profile deleted' });
+    } catch (error) {
+      res.status(400).json({ error: 'Failed to delete profile' });
+    }
+  });
