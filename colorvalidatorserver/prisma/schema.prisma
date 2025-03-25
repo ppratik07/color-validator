@@ -26,9 +26,7 @@ model Color{
 id        String  @id @default(uuid())
 name      String
 hex       String
-r         Int?
-g         Int?
-b         Int?
+rgb       Json
 profileId String
 profile   BrandProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 createdAt  DateTime @default(now())
