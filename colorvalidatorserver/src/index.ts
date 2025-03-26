@@ -73,4 +73,12 @@ app.get('/analysis-history',(req,res)=>{
     res.json(history);
 })
 
+// Get analysis result by ID
+app.get('/analysis/:id', async (req, res) => {
+    const { id } = req.params;
+    const result = await prisma.analysisResult.findUnique({ where: { id } });
+    if (!result) return res.status(404).json({ error: 'Analysis not found' });
+    res.json(result);
+  });
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
