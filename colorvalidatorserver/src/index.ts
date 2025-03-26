@@ -66,4 +66,11 @@ app.get("/profiles", async (req, res) => {
   res.json(profiles);
 });
 
+//Getting anlaysis history
+
+app.get('/analysis-history',(req,res)=>{
+    const history = await prisma.analysisHistory.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json(history);
+})
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
