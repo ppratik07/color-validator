@@ -81,4 +81,30 @@ app.get('/analysis/:id', async (req, res) => {
     res.json(result);
   });
 
+  // Save analysis result
+app.post('/analysis', async (req, res) => {
+    const { fileName, imageUrl, overallCompliance } = req.body;
+    const status = overallCompliance > 90 ? 'Compliant' : overallCompliance > 75 ? 'Needs Review' : 'Non-Compliant';
+  
+    try {
+      const newResult = await prisma.analysisResult.create({
+        data: { fileName, imageUrl, overallCompliance, status }
+      });
+  
+      await prisma.analysisHistory.create({
+        data: {
+          id: newResult.id,
+          name: fileName,
+          imageUrl,
+          overallCompliance,
+          status
+        }
+      });
+  
+      res.json(newResult);
+    } catch (error) {
+      res.status(400).json({ error: 'Failed to save analysis result' });
+    }
+  });
+  
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
