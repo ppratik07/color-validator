@@ -31,3 +31,21 @@ profileId String
 profile   BrandProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 createdAt  DateTime @default(now())
 }
+
+model AnalysisResult {
+  id                 String  @id @default(uuid())
+  fileName           String
+  imageUrl          String
+  timestamp        DateTime  @default(now())
+  overallCompliance Float
+  status            String
+}
+
+model AnalysisHistory {
+  id                 String  @id @default(uuid())
+  name               String
+  imageUrl          String
+  createdAt        DateTime @default(now())
+  overallCompliance Float
+  status            String
+}
