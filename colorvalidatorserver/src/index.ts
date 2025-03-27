@@ -1,12 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
-import cors from 'cors';
+import cors from "cors";
 
 const app = express();
 const PORT = 3000;
 const prisma = new PrismaClient();
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: "http://localhost:5173" }));
 
 //Creating new profile
 
@@ -68,43 +68,52 @@ app.get("/profiles", async (req, res) => {
 
 //Getting anlaysis history
 
-app.get('/analysis-history',(req,res)=>{
-    const history = await prisma.analysisHistory.findMany({ orderBy: { createdAt: 'desc' } });
-    res.json(history);
-})
+app.get("/analysis-history", async (req, res) => {
+  const history = await prisma.analysisHistory.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+  res.json(history);
+});
 
 // Get analysis result by ID
-app.get('/analysis/:id', async (req, res) => {
-    const { id } = req.params;
-    const result = await prisma.analysisResult.findUnique({ where: { id } });
-    if (!result) return res.status(404).json({ error: 'Analysis not found' });
-    res.json(result);
-  });
+app.get("/analysis/:id", async (req, res) => {
+  const { id } = req.params;
+  const result = await prisma.analysisResult.findUnique({ where: { id } });
+  if (!result) {
+    res.status(404).json({ error: "Analysis not found" });
+  }
+  res.json(result);
+});
 
-  // Save analysis result
-app.post('/analysis', async (req, res) => {
-    const { fileName, imageUrl, overallCompliance } = req.body;
-    const status = overallCompliance > 90 ? 'Compliant' : overallCompliance > 75 ? 'Needs Review' : 'Non-Compliant';
-  
-    try {
-      const newResult = await prisma.analysisResult.create({
-        data: { fileName, imageUrl, overallCompliance, status }
-      });
-  
-      await prisma.analysisHistory.create({
-        data: {
-          id: newResult.id,
-          name: fileName,
-          imageUrl,
-          overallCompliance,
-          status
-        }
-      });
-  
-      res.json(newResult);
-    } catch (error) {
-      res.status(400).json({ error: 'Failed to save analysis result' });
-    }
-  });
-  
+// Save analysis result
+app.post("/analysis", async (req, res) => {
+  const { fileName, imageUrl, overallCompliance } = req.body;
+  const status =
+    overallCompliance > 90
+      ? "Compliant"
+      : overallCompliance > 75
+      ? "Needs Review"
+      : "Non-Compliant";
+
+  try {
+    const newResult = await prisma.analysisResult.create({
+      data: { fileName, imageUrl, overallCompliance, status },
+    });
+
+    await prisma.analysisHistory.create({
+      data: {
+        id: newResult.id,
+        name: fileName,
+        imageUrl,
+        overallCompliance,
+        status,
+      },
+    });
+
+    res.json(newResult);
+  } catch (error) {
+    res.status(400).json({ error: "Failed to save analysis result" });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -19,7 +19,7 @@ const app = (0, express_1.default)();
 const PORT = 3000;
 const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
-app.use((0, cors_1.default)({ origin: 'http://localhost:5173' }));
+app.use((0, cors_1.default)({ origin: "http://localhost:5173" }));
 //Creating new profile
 app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, tolerance, colors } = req.body;
@@ -77,5 +77,48 @@ app.get("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         include: { colors: true },
     });
     res.json(profiles);
+}));
+//Getting anlaysis history
+app.get("/analysis-history", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const history = yield prisma.analysisHistory.findMany({
+        orderBy: { createdAt: "desc" },
+    });
+    res.json(history);
+}));
+// Get analysis result by ID
+app.get("/analysis/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield prisma.analysisResult.findUnique({ where: { id } });
+    if (!result) {
+        res.status(404).json({ error: "Analysis not found" });
+    }
+    res.json(result);
+}));
+// Save analysis result
+app.post("/analysis", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { fileName, imageUrl, overallCompliance } = req.body;
+    const status = overallCompliance > 90
+        ? "Compliant"
+        : overallCompliance > 75
+            ? "Needs Review"
+            : "Non-Compliant";
+    try {
+        const newResult = yield prisma.analysisResult.create({
+            data: { fileName, imageUrl, overallCompliance, status },
+        });
+        yield prisma.analysisHistory.create({
+            data: {
+                id: newResult.id,
+                name: fileName,
+                imageUrl,
+                overallCompliance,
+                status,
+            },
+        });
+        res.json(newResult);
+    }
+    catch (error) {
+        res.status(400).json({ error: "Failed to save analysis result" });
+    }
 }));
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
