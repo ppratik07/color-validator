@@ -1,0 +1,14 @@
+import {
+  BrandProfile,
+  AnalysisHistory,
+  AnalysisResult,
+  BrandColor,
+} from "../types/types";
+
+const BASE_URL = "http://localhost:3000";
+export const DataService = {
+  async getBrandProfiles(): Promise<BrandProfile[]> {
+    const res = await fetch(`${BASE_URL}/profiles`);
+    return res.json();
+  },
+};
