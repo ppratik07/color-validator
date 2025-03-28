@@ -10,6 +10,7 @@ import Settings from './pages/Settings';
 import Index from './pages/Index';
 import AnalysisDetails from './pages/AnalysisDetail';
 import { LandingPage } from './pages/LandingPage';
+import AboutSection  from './pages/AboutSection';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/settings" element={<Settings />} />
             <Route path='/analysis/:id' element={<AnalysisDetails/>}/>
+            <Route path='/about' element={<AboutSection/>}/>
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
