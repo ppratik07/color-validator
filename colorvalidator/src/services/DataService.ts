@@ -39,4 +39,8 @@ export const DataService = {
     const res = await fetch(`${BASE_URL}/analysis-history`);
     return res.json();
   },
+  async getAnalysisById(id: string): Promise<AnalysisResult | null> {
+    const res = await fetch(`${BASE_URL}/analysis/${id}`);
+    return res.json();
+  },
 };
