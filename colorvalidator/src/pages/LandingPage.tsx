@@ -4,6 +4,7 @@ import { ArrowRight, Upload, FileCheck, PieChart, Palette, Sliders, PackageCheck
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import {LogoHeader} from "../components/LogoHeader"
+import Footer from "../components/Footer"
 
 export const LandingPage = () => {
     return (
@@ -27,7 +28,7 @@ export const LandingPage = () => {
                                 </p>
                                 <div className="flex flex-wrap gap-4 justify-center pt-4 animate-slide-up animation-delay-200">
                                     <Button size="lg" asChild className="bg-blue-900 hover:bg-blue-400 text-white transition-colors">
-                                        <Link to="/compare">
+                                        <Link to="/index">
                                             Start Validating <ArrowRight className="ml-2 h-4 w-4" />
                                         </Link>
                                     </Button>                              
@@ -101,6 +102,7 @@ export const LandingPage = () => {
                         </div>
                     </div>
                 </section>
+                <Footer/>
             </div>
         </div>
     );
