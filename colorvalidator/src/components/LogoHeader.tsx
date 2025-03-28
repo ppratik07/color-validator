@@ -25,7 +25,7 @@ export const LogoHeader = () => {
         >
             <div className="container flex justify-between items-center pt-2 ml-4">
                 <Link to="/" className="flex items-center gap-2">
-                    <Palette className="h-6 w-6 text-brand-blue" />
+                    <Palette className="h-6 w-6 text-blue-600" />
                     <span className="font-display font-medium text-xl">ColorValidator</span>
                 </Link>
                 <div className="flex items-center gap-4">

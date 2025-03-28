@@ -23,7 +23,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       )}
     >
       <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-        <Icon className="h-5 w-5" />
+        <Icon className="h-5 w-5 text-blue-600" />
       </div>
       <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
         {title}
