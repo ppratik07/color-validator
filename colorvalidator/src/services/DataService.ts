@@ -11,4 +11,8 @@ export const DataService = {
     const res = await fetch(`${BASE_URL}/profiles`);
     return res.json();
   },
+  async getBrandProfileById(id: string): Promise<BrandProfile | null> {
+    const res = await fetch(`${BASE_URL}/profiles/${id}`);
+    return res.json();
+  },
 };
