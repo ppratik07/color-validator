@@ -11,6 +11,7 @@ import Index from './pages/Index';
 import AnalysisDetails from './pages/AnalysisDetail';
 import { LandingPage } from './pages/LandingPage';
 import AboutSection  from './pages/AboutSection';
+import NotFound  from './pages/NotFound';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/settings" element={<Settings />} />
             <Route path='/analysis/:id' element={<AnalysisDetails/>}/>
             <Route path='/about' element={<AboutSection/>}/>
+            <Route path='/404' element={<NotFound/>}/>
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
