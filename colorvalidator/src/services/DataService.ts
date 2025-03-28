@@ -1,10 +1,10 @@
+import { BASE_URL } from "../config";
 import {
   BrandProfile,
   AnalysisHistory,
   AnalysisResult,
 } from "../types/types";
 
-const BASE_URL = "http://localhost:3000";
 export const DataService = {
   async getBrandProfiles(): Promise<BrandProfile[]> {
     const res = await fetch(`${BASE_URL}/profiles`);
