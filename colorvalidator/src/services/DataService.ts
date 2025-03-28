@@ -35,4 +35,8 @@ export const DataService = {
     const res = await fetch(`${BASE_URL}/profiles/${id}`, { method: "DELETE" });
     return res.json();
   },
+  async getAnalysisHistory(): Promise<AnalysisHistory[]> {
+    const res = await fetch(`${BASE_URL}/analysis-history`);
+    return res.json();
+  },
 };
