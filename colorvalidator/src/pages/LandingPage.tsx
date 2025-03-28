@@ -3,12 +3,14 @@ import FeatureCard from "../components/FeatureCard";
 import { ArrowRight, Upload, FileCheck, PieChart, Palette, Sliders, PackageCheck, Repeat } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
+import {LogoHeader} from "../components/LogoHeader"
 
 export const LandingPage = () => {
     return (
-        <div>
+        <div className="-m-14">
             <div className="w-full flex flex-col bg-background text-foreground">
                 {/* Hero Section */}
+                <LogoHeader/>
                 <AnimatedGradient>
                     <section className="pt-32 pb-20 relative">
                         <div className="container mx-auto px-4">
@@ -28,10 +30,7 @@ export const LandingPage = () => {
                                         <Link to="/compare">
                                             Start Validating <ArrowRight className="ml-2 h-4 w-4" />
                                         </Link>
-                                    </Button>
-                                    <Button size="lg" variant="outline" asChild>
-                                        <Link to="/guidelines">View Brand Guidelines</Link>
-                                    </Button>
+                                    </Button>                              
                                 </div>
                             </div>
                         </div>
@@ -69,7 +68,7 @@ export const LandingPage = () => {
                                         <p className="text-white/80 mb-8">Start validating your packaging colors today and maintain brand consistency across all your products.</p>
                                         <div className="flex flex-wrap gap-4">
                                             <Button size="lg" variant="secondary" asChild>
-                                                <Link to="/compare">Get Started <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                                                <Link to="/index">Get Started <ArrowRight className="ml-2 h-4 w-4" /></Link>
                                             </Button>
                                             <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10" asChild>
                                                 <Link to="/guidelines">Learn More</Link>
