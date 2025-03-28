@@ -29,13 +29,13 @@ export const LogoHeader = () => {
                     <span className="font-display font-medium text-xl">ColorValidator</span>
                 </Link>
                 <div className="flex items-center gap-4">
-                    <Button
+                    {/* <Button
                         variant="outline"
                         size="sm"
                         className="hidden sm:flex"
                     >
                         Sign In
-                    </Button>
+                    </Button> */}
                     <Button size="sm">Get Started</Button>
                 </div>
             </div>
