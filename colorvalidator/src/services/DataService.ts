@@ -31,4 +31,8 @@ export const DataService = {
     });
     return res.json();
   },
+  async deleteBrandProfile(id: string): Promise<boolean> {
+    const res = await fetch(`${BASE_URL}/profiles/${id}`, { method: "DELETE" });
+    return res.json();
+  },
 };
