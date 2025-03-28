@@ -23,4 +23,12 @@ export const DataService = {
     });
     return res.json();
   },
+  async updateBrandProfile(id: string, updates: Partial<BrandProfile>): Promise<BrandProfile | null> {
+    const res = await fetch(`${BASE_URL}/profiles/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updates),
+    });
+    return res.json();
+  },
 };
