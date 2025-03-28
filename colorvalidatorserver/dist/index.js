@@ -19,7 +19,7 @@ const app = (0, express_1.default)();
 const PORT = 3000;
 const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
-app.use((0, cors_1.default)({ origin: "http://localhost:5173" }));
+app.use((0, cors_1.default)({ origin: process.env.FRONTEND_URL }));
 //Creating new profile
 app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, tolerance, colors } = req.body;
