@@ -6,12 +6,15 @@ const app = express();
 const PORT = 3000;
 const prisma = new PrismaClient();
 app.use(express.json());
-app.use(cors({ origin: process.env.FRONTEND_URL }));
+//@ts-ignore
+
+app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" }));
 
 //Creating new profile
 
 app.post("/profiles", async (req, res) => {
   const { name, tolerance, colors } = req.body;
+  console.log(req.body);
   try {
     const profile = await prisma.brandProfile.create({
       data: {
@@ -21,6 +24,7 @@ app.post("/profiles", async (req, res) => {
       },
       include: { colors: true },
     });
+    console.log(profile);
     res.json(profile);
   } catch (error) {
     console.error("Error creating profile:", error);
@@ -59,12 +63,20 @@ app.delete("/profiles/:id", async (req, res) => {
 });
 
 //get all profile
+// Get all brand profiles with their colors
 app.get("/profiles", async (req, res) => {
-  const profiles = await prisma.brandProfile.findMany({
-    include: { colors: true },
+    try {
+      const profiles = await prisma.brandProfile.findMany({
+        include: {
+          colors: true, // Include associated colors
+        },
+      });
+      console.log(profiles);
+      res.json(profiles);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch brand profiles" });
+    }
   });
-  res.json(profiles);
-});
 
 //Getting anlaysis history
 

@@ -1,9 +1,5 @@
 import { BASE_URL } from "../config";
-import {
-  BrandProfile,
-  AnalysisHistory,
-  AnalysisResult,
-} from "../types/types";
+import { BrandProfile, AnalysisHistory, AnalysisResult } from "../types/types";
 
 export const DataService = {
   async getBrandProfiles(): Promise<BrandProfile[]> {
@@ -17,7 +13,7 @@ export const DataService = {
   async createBrandProfile(
     profile: Omit<BrandProfile, "id">
   ): Promise<BrandProfile> {
-    const res = await fetch(`${BASE_URL}/profiles`, {
+    const res = await fetch('http://localhost/3000/profiles', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(profile),

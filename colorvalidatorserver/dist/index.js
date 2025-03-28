@@ -19,10 +19,12 @@ const app = (0, express_1.default)();
 const PORT = 3000;
 const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
-app.use((0, cors_1.default)({ origin: process.env.FRONTEND_URL }));
+//@ts-ignore
+app.use((0, cors_1.default)({ origin: process.env.FRONTEND_URL || "http://localhost:5173" }));
 //Creating new profile
 app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, tolerance, colors } = req.body;
+    console.log(req.body);
     try {
         const profile = yield prisma.brandProfile.create({
             data: {
@@ -32,6 +34,7 @@ app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* 
             },
             include: { colors: true },
         });
+        console.log(profile);
         res.json(profile);
     }
     catch (error) {
@@ -72,11 +75,20 @@ app.delete("/profiles/:id", (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 }));
 //get all profile
+// Get all brand profiles with their colors
 app.get("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const profiles = yield prisma.brandProfile.findMany({
-        include: { colors: true },
-    });
-    res.json(profiles);
+    try {
+        const profiles = yield prisma.brandProfile.findMany({
+            include: {
+                colors: true, // Include associated colors
+            },
+        });
+        console.log(profiles);
+        res.json(profiles);
+    }
+    catch (error) {
+        res.status(500).json({ error: "Failed to fetch brand profiles" });
+    }
 }));
 //Getting anlaysis history
 app.get("/analysis-history", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
