@@ -2,7 +2,6 @@ import {
   BrandProfile,
   AnalysisHistory,
   AnalysisResult,
-  BrandColor,
 } from "../types/types";
 
 const BASE_URL = "http://localhost:3000";
@@ -15,7 +14,9 @@ export const DataService = {
     const res = await fetch(`${BASE_URL}/profiles/${id}`);
     return res.json();
   },
-  async createBrandProfile(profile: Omit<BrandProfile, 'id'>): Promise<BrandProfile> {
+  async createBrandProfile(
+    profile: Omit<BrandProfile, "id">
+  ): Promise<BrandProfile> {
     const res = await fetch(`${BASE_URL}/profiles`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -23,7 +24,10 @@ export const DataService = {
     });
     return res.json();
   },
-  async updateBrandProfile(id: string, updates: Partial<BrandProfile>): Promise<BrandProfile | null> {
+  async updateBrandProfile(
+    id: string,
+    updates: Partial<BrandProfile>
+  ): Promise<BrandProfile | null> {
     const res = await fetch(`${BASE_URL}/profiles/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -41,6 +45,16 @@ export const DataService = {
   },
   async getAnalysisById(id: string): Promise<AnalysisResult | null> {
     const res = await fetch(`${BASE_URL}/analysis/${id}`);
+    return res.json();
+  },
+  async saveAnalysisResult(
+    result: Omit<AnalysisResult, "id">
+  ): Promise<AnalysisResult> {
+    const res = await fetch(`${BASE_URL}/analysis`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(result),
+    });
     return res.json();
   },
 };
