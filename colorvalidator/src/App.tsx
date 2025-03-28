@@ -1,15 +1,32 @@
 
+
+import { BrowserRouter, Routes,Route } from 'react-router-dom';
 import './App.css'
-import { Button } from './components/ui/button'
+import { Toaster } from './components/ui/sonner'
+import { Toaster as Sonner } from "./components/ui/sonner";
+import { TooltipProvider } from './components/ui/tooltip'
+import History from './pages/History';
+import Settings from './pages/Settings';
+import Index from './pages/Index';
+import AnalysisDetails from './pages/AnalysisDetail';
+import { LandingPage } from './pages/LandingPage';
 
 function App() {
-
-
   return (
     <>
-      <h1 className="text-3xl font-bold underline">
-       <Button> Hello world!</Button>
-      </h1>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/index" element={<Index />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path='/analysis/:id' element={<AnalysisDetails/>}/>
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
     </>
   )
 }
