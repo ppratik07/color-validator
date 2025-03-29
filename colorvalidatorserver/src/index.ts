@@ -7,14 +7,17 @@ const PORT = 3000;
 const prisma = new PrismaClient();
 app.use(express.json());
 //@ts-ignore
-
-app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" }));
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+  credentials: true
+}));
 
 //Creating new profile
 
 app.post("/profiles", async (req, res) => {
   const { name, tolerance, colors } = req.body;
-  console.log(req.body);
   try {
     const profile = await prisma.brandProfile.create({
       data: {
@@ -24,7 +27,6 @@ app.post("/profiles", async (req, res) => {
       },
       include: { colors: true },
     });
-    console.log(profile);
     res.json(profile);
   } catch (error) {
     console.error("Error creating profile:", error);
