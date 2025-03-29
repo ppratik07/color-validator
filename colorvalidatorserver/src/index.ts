@@ -7,12 +7,17 @@ const PORT = 3000;
 const prisma = new PrismaClient();
 app.use(express.json());
 //@ts-ignore
-app.use(cors({ 
-  origin: "https://color-validator.vercel.app", // Allow frontend to access API
-  methods: ["GET", "POST", "PUT", "DELETE"],  // Allowed methods
-  allowedHeaders: ["Content-Type", "Authorization"]  // Allowed headers
-}));
-
+// app.use(cors({ 
+//   origin: "https://color-validator.vercel.app", // Allow frontend to access API
+//   methods: ["GET", "POST", "PUT", "DELETE"],  // Allowed methods
+//   allowedHeaders: ["Content-Type", "Authorization"]  // Allowed headers
+// }));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");  // Allow all origins (for debugging)
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 //Creating new profile
 
 app.post("/profiles", async (req, res) => {
