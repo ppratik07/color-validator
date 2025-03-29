@@ -25,18 +25,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 const PORT = 3000;
 const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
 //@ts-ignore
-app.use((0, cors_1.default)({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-    credentials: true,
-}));
+// app.use(cors({ 
+//   origin: "https://color-validator.vercel.app", // Allow frontend to access API
+//   methods: ["GET", "POST", "PUT", "DELETE"],  // Allowed methods
+//   allowedHeaders: ["Content-Type", "Authorization"]  // Allowed headers
+// }));
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*"); // Allow all origins (for debugging)
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    next();
+});
 //Creating new profile
 app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, tolerance, colors } = req.body;
@@ -73,7 +77,8 @@ app.put("/profiles/:id", (req, res) => __awaiter(void 0, void 0, void 0, functio
                     create: colors === null || colors === void 0 ? void 0 : colors.map((_a) => {
                         var { id, profileId, createdAt } = _a, rest = __rest(_a, ["id", "profileId", "createdAt"]);
                         return rest;
-                    }),
+                    }), //Removes unnceessary fielss
+                    // does not need id, profileId, or createdAt when creating a new color entry under a profile. It automatically generates id and links profileId for you.
                 },
             },
             include: { colors: true },
