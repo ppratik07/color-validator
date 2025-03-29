@@ -8,24 +8,24 @@ const prisma = new PrismaClient();
 app.use(express.json());
 
 //@ts-ignore
-const allowCors = (fn : any) => async (req , res) => {
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Change this to your frontend URL if needed
-  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
-  );
+// const allowCors = (fn : any) => async (req , res) => {
+//   res.setHeader("Access-Control-Allow-Credentials", "true");
+//   res.setHeader("Access-Control-Allow-Origin", "*"); // Change this to your frontend URL if needed
+//   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
+//   );
 
-  if (req.method === "OPTIONS") {
-    res.status(200).end();
-    return;
-  }
-  return await fn(req, res);
-};
+//   if (req.method === "OPTIONS") {
+//     res.status(200).end();
+//     return;
+//   }
+//   return await fn(req, res);
+// };
 //Creating new profile
 
-app.post("/profiles", allowCors(async (req: any, res: any) => {
+app.post("/profiles", async (req: any, res: any) => {
   const { name, tolerance, colors } = req.body;
   try {
     const profile = await prisma.brandProfile.create({
@@ -41,7 +41,7 @@ app.post("/profiles", allowCors(async (req: any, res: any) => {
     console.error("Error creating profile:", error);
     res.status(400).json({ error: (error as Error).message });
   }
-}));
+});
 // Update a profile
 app.put("/profiles/:id", async (req, res) => {
   const { id } = req.params;
