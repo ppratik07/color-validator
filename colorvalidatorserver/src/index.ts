@@ -6,21 +6,26 @@ const app = express();
 const PORT = 3000;
 const prisma = new PrismaClient();
 app.use(express.json());
+
 //@ts-ignore
-// app.use(cors({ 
-//   origin: "https://color-validator.vercel.app", // Allow frontend to access API
-//   methods: ["GET", "POST", "PUT", "DELETE"],  // Allowed methods
-//   allowedHeaders: ["Content-Type", "Authorization"]  // Allowed headers
-// }));
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");  // Allow all origins (for debugging)
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
+const allowCors = (fn : any) => async (req , res) => {
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Change this to your frontend URL if needed
+  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
+  );
+
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+  return await fn(req, res);
+};
 //Creating new profile
 
-app.post("/profiles", async (req, res) => {
+app.post("/profiles", allowCors(async (req: any, res: any) => {
   const { name, tolerance, colors } = req.body;
   try {
     const profile = await prisma.brandProfile.create({
@@ -36,7 +41,7 @@ app.post("/profiles", async (req, res) => {
     console.error("Error creating profile:", error);
     res.status(400).json({ error: (error as Error).message });
   }
-});
+}));
 // Update a profile
 app.put("/profiles/:id", async (req, res) => {
   const { id } = req.params;

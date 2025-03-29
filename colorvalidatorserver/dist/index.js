@@ -30,19 +30,19 @@ const PORT = 3000;
 const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
 //@ts-ignore
-// app.use(cors({ 
-//   origin: "https://color-validator.vercel.app", // Allow frontend to access API
-//   methods: ["GET", "POST", "PUT", "DELETE"],  // Allowed methods
-//   allowedHeaders: ["Content-Type", "Authorization"]  // Allowed headers
-// }));
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*"); // Allow all origins (for debugging)
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    next();
+const allowCors = (fn) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Origin", "*"); // Change this to your frontend URL if needed
+    res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
+    res.setHeader("Access-Control-Allow-Headers", "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization");
+    if (req.method === "OPTIONS") {
+        res.status(200).end();
+        return;
+    }
+    return yield fn(req, res);
 });
 //Creating new profile
-app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/profiles", allowCors((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, tolerance, colors } = req.body;
     try {
         const profile = yield prisma.brandProfile.create({
@@ -59,7 +59,7 @@ app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         console.error("Error creating profile:", error);
         res.status(400).json({ error: error.message });
     }
-}));
+})));
 // Update a profile
 app.put("/profiles/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
