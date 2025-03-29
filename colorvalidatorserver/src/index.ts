@@ -7,12 +7,14 @@ const PORT = 3000;
 const prisma = new PrismaClient();
 app.use(express.json());
 //@ts-ignore
-app.use(cors({
-  origin: 'http://localhost:5173',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+    credentials: true,
+  })
+);
 
 //Creating new profile
 
@@ -37,19 +39,28 @@ app.post("/profiles", async (req, res) => {
 app.put("/profiles/:id", async (req, res) => {
   const { id } = req.params;
   const { name, tolerance, colors } = req.body;
+
   try {
-    await prisma.color.deleteMany({ where: { profileId: id } });
+    if (colors?.length) {
+      await prisma.color.deleteMany({ where: { profileId: id } });
+    }
+
     const updatedProfile = await prisma.brandProfile.update({
       where: { id },
       data: {
         name,
         tolerance,
-        colors: { create: colors },
+        colors: {
+          create: colors?.map(({ id, profileId, createdAt, ...rest }: { id: string; profileId: string; createdAt: Date; [key: string]: any }) => rest), //Removes unnceessary fielss
+          // does not need id, profileId, or createdAt when creating a new color entry under a profile. It automatically generates id and links profileId for you.
+        },
       },
       include: { colors: true },
     });
+
     res.json(updatedProfile);
   } catch (error) {
+    console.error("Error updating profile:", error);
     res.status(400).json({ error: "Failed to update profile" });
   }
 });
@@ -67,18 +78,18 @@ app.delete("/profiles/:id", async (req, res) => {
 //get all profile
 // Get all brand profiles with their colors
 app.get("/profiles", async (req, res) => {
-    try {
-      const profiles = await prisma.brandProfile.findMany({
-        include: {
-          colors: true, // Include associated colors
-        },
-      });
-      console.log(profiles);
-      res.json(profiles);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch brand profiles" });
-    }
-  });
+  try {
+    const profiles = await prisma.brandProfile.findMany({
+      include: {
+        colors: true, // Include associated colors
+      },
+    });
+    console.log(profiles);
+    res.json(profiles);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch brand profiles" });
+  }
+});
 
 //Getting anlaysis history
 
