@@ -37,7 +37,7 @@ export const LogoHeader = () => {
                     >
                         Sign In
                     </Button> */}
-                    <Button onClick={()=>navigate('/packaging-color')} size="sm" className='cursor-pointer'>Get Started</Button>
+                    <Button onClick={()=>navigate('/packaging-color')} size="sm" className='cursor-pointer sm: mr-8'>Get Started</Button>
                 </div>
             </div>
         </header>

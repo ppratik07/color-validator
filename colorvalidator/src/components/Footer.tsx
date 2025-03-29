@@ -14,7 +14,7 @@ const Footer = () => {
                             </div>
                             <span className="text-lg font-medium tracking-tight">ColorMatch</span>
                         </Link>
-                        <p className="text-sm text-muted-foreground -ml-28">
+                        <p className="text-sm text-muted-foreground sm:-ml-28">
                             Precision color validation for packaging and brand compliance.
                         </p>
                     </div>

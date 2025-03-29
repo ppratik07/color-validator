@@ -21,7 +21,7 @@ const History = () => {
   const [filteredHistory, setFilteredHistory] = useState<AnalysisHistory[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   useEffect(() => {
     const fetchHistory = async () => {
       try {
@@ -34,46 +34,43 @@ const History = () => {
         setLoading(false);
       }
     };
-    
+
     fetchHistory();
   }, []);
-  
+
   useEffect(() => {
     if (searchQuery.trim() === '') {
       setFilteredHistory(history);
       return;
     }
-    
+
     const filtered = history.filter(item => 
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredHistory(filtered);
   }, [searchQuery, history]);
-  
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    
-    // Check if it's today
     const today = new Date();
+    
     if (date.toDateString() === today.toDateString()) {
       return `Today, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
     }
-    
-    // Check if it's yesterday
+
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     if (date.toDateString() === yesterday.toDateString()) {
       return `Yesterday, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
     }
-    
-    // Otherwise, return the formatted date
+
     return date.toLocaleDateString([], { 
       month: 'short', 
       day: 'numeric', 
       year: 'numeric' 
     });
   };
-  
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'Compliant':
@@ -86,7 +83,7 @@ const History = () => {
         return null;
     }
   };
-  
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Compliant':
@@ -99,34 +96,34 @@ const History = () => {
         return "bg-muted text-muted-foreground";
     }
   };
-  
+
   return (
-    <main className="min-h-screen flex flex-col bg-muted/30 -m-8 -mr-64 -ml-64">
+    <main className="min-h-screen flex flex-col bg-muted/30 px-4 sm:px-6">
       <Header 
         title="Analysis History" 
         subtitle="View and manage your past color analyses"
         backLink="/"
         backLabel="Back to Analyzer"
       />
-      
-      <div className="flex-grow p-4 sm:p-6">
+
+      <div className="flex-grow">
         <div className="max-w-7xl mx-auto">
           <Card className="bg-white shadow-sm">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6">
-                <h2 className="text-xl font-semibold">Recent Analyses</h2>
-                
-                <div className="relative">
+                <h2 className="text-lg sm:text-xl font-semibold">Recent Analyses</h2>
+
+                <div className="relative w-full sm:w-[250px]">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Search analyses..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 w-full sm:w-[250px]"
+                    className="pl-9"
                   />
                 </div>
               </div>
-              
+
               {loading ? (
                 <div className="flex justify-center items-center py-12">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
@@ -140,7 +137,7 @@ const History = () => {
                       ? `No results match "${searchQuery}"`
                       : "You haven't analyzed any designs yet"}
                   </p>
-                  
+
                   <Button asChild className="mt-4">
                     <Link to="/">Start Analyzing</Link>
                   </Button>
@@ -148,55 +145,38 @@ const History = () => {
               ) : (
                 <div className="space-y-3">
                   {filteredHistory.map((item, index) => (
-                    <div 
-                      key={item.id} 
-                      className="animate-appear"
-                      style={{ animationDelay: `${index * 0.05}s` }}
-                    >
+                    <div key={item.id} className="animate-appear">
                       <Link to={`/analysis/${item.id}`}>
-                        <div className="flex items-start sm:items-center gap-4 p-4 rounded-lg border border-border hover:border-primary/50 hover:bg-muted/10 transition-all group">
-                          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden flex-shrink-0">
+                        <div className="flex items-start sm:items-center gap-3 sm:gap-4 p-4 rounded-lg border border-border hover:bg-muted/10 transition-all">
+                          <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-lg overflow-hidden">
                             <img 
                               src={item.imageUrl} 
                               alt={item.name} 
-                              className="w-full h-full object-cover transition-transform group-hover:scale-105" 
+                              className="w-full h-full object-cover"
                             />
                           </div>
-                          
+
                           <div className="flex-grow">
-                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                              <h3 className="font-medium text-foreground line-clamp-1">{item.name}</h3>
-                              <div className="flex items-center">
+                            <h3 className="font-medium text-foreground line-clamp-1">{item.name}</h3>
+
+                            <div className="flex flex-col sm:flex-row justify-between sm:items-center text-sm mt-1">
+                              <div className="flex items-center text-muted-foreground">
+                                <Calendar className="h-4 w-4 mr-1.5" />
+                                <span>{formatDate(item.createdAt)}</span>
+                              </div>
+
+                              <div className="flex items-center mt-1 sm:mt-0">
                                 <div className={`text-xs rounded-full px-2 py-0.5 flex items-center gap-1 ${getStatusColor(item.status)}`}>
                                   {getStatusIcon(item.status)}
                                   <span>{item.status}</span>
                                 </div>
-                                <ChevronRight className="h-5 w-5 ml-2 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                              </div>
-                            </div>
-                            
-                            <div className="flex flex-col sm:flex-row gap-x-6 gap-y-1 mt-1">
-                              <div className="flex items-center text-sm text-muted-foreground">
-                                <Calendar className="h-3.5 w-3.5 mr-1.5" />
-                                <span>{formatDate(item.createdAt)}</span>
-                              </div>
-                              
-                              <div className="text-sm">
-                                <span className="text-muted-foreground">Compliance: </span>
-                                <span className={item.overallCompliance >= 90 
-                                  ? "text-green-600" 
-                                  : item.overallCompliance >= 75 
-                                    ? "text-yellow-600" 
-                                    : "text-red-600"
-                                }>
-                                  {item.overallCompliance}%
-                                </span>
+                                <ChevronRight className="h-5 w-5 ml-2 text-muted-foreground sm:opacity-0 sm:group-hover:opacity-100 transition-opacity" />
                               </div>
                             </div>
                           </div>
                         </div>
                       </Link>
-                      
+
                       {index < filteredHistory.length - 1 && (
                         <Separator className="my-3" />
                       )}
@@ -208,16 +188,9 @@ const History = () => {
           </Card>
         </div>
       </div>
-      
-      <footer className="py-4 px-6 border-t border-border bg-white">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-sm text-muted-foreground">
-            Smart Package Color Validator
-          </p>
-          <p className="text-xs text-muted-foreground mt-2 sm:mt-0">
-            © {new Date().getFullYear()} All rights reserved
-          </p>
-        </div>
+
+      <footer className="py-4 text-center text-sm text-muted-foreground">
+        Smart Package Color Validator © {new Date().getFullYear()}
       </footer>
     </main>
   );

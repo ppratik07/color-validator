@@ -3,7 +3,7 @@ import { Button } from '../components/ui/button';
 import { toast } from 'sonner';
 import { Loader2, ScanSearch } from 'lucide-react';
 import Header from '../components/Header';
-import {UploadDesign} from '../components/UploadDesign';
+import { UploadDesign } from '../components/UploadDesign';
 import BrandProfileSelector from '../components/BrandProfileSelector';
 import AnalysisResults from '../components/AnalysisResults';
 import { BrandProfile, AnalysisResult, ColorComparison } from '../types/types';
@@ -16,57 +16,49 @@ const Index = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
-  
+
   const handleImageSelected = (file: File, preview: string) => {
     setSelectedFile(file);
     setPreviewUrl(preview);
-    // Keep any previous analysis result when changing the image
-    // This allows users to compare different designs
   };
-  
+
   const handleProfileSelected = (profile: BrandProfile) => {
     setSelectedProfile(profile);
-    // Keep any previous analysis result when changing the profile
-    // This allows users to see how the same design works with different brand guidelines
   };
-  
+
   const handleAnalyze = async () => {
     if (!selectedFile || !previewUrl || !selectedProfile) {
       toast.error('Please upload an image and select a brand profile');
       return;
     }
-    
+
     try {
       setIsAnalyzing(true);
       setAnalysisError(null);
-      
-      // Extract colors from the uploaded image
+
       console.log("Starting color extraction from:", previewUrl);
       const extractedColors = await mockExtractColorsFromImage(previewUrl);
-      
+
       if (!extractedColors || extractedColors.length === 0) {
         throw new Error('No colors could be extracted from the image');
       }
-      
+
       console.log("Successfully extracted colors:", extractedColors);
       console.log("Selected brand profile:", selectedProfile);
-      
-      // Compare each extracted color with the brand colors
+
       const comparisons: ColorComparison[] = extractedColors.map(color => {
         const comparison = compareColors(color, selectedProfile.colors, selectedProfile.tolerance);
         console.log(`Color comparison for ${color.hex}:`, comparison);
         return comparison;
       });
-      
-      // Calculate overall compliance
+
       const compliantColors = comparisons.filter(c => c.isWithinTolerance).length;
       const overallCompliance = comparisons.length > 0 
         ? Math.round((compliantColors / comparisons.length) * 100)
         : 0;
-      
+
       console.log(`Compliance: ${compliantColors} out of ${comparisons.length} colors (${overallCompliance}%)`);
-      
-      // Create the analysis result
+
       const result: AnalysisResult = {
         fileName: selectedFile.name,
         imageUrl: previewUrl,
@@ -75,10 +67,9 @@ const Index = () => {
         overallCompliance,
         timestamp: new Date().toISOString()
       };
-      
-      // Update the state
+
       setAnalysisResult(result);
-      
+
       if (overallCompliance >= 80) {
         toast.success(`Analysis complete - ${overallCompliance}% color compliance`);
       } else if (overallCompliance >= 50) {
@@ -94,42 +85,39 @@ const Index = () => {
       setIsAnalyzing(false);
     }
   };
-  
-  // This useEffect helps debug the state of analysisResult
+
   useEffect(() => {
     console.log("Analysis result updated:", analysisResult);
   }, [analysisResult]);
-  
-  // This useEffect logs the selected profile for debugging
+
   useEffect(() => {
     console.log("Selected profile updated:", selectedProfile);
   }, [selectedProfile]);
-  
+
   return (
-    <main className="min-h-screen flex flex-col bg-muted/30 -m-8 -mr-64 -ml-64">
+    <main className="min-h-screen flex flex-col bg-muted/30 px-4 sm:px-8">
       <Header 
         title="Smart Package Color Validator" 
         subtitle="Upload a design and analyze color compliance"
       />
-      
-      <div className="flex-grow p-4 sm:p-6">
+
+      <div className="flex-grow py-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
             <div className="space-y-6">
               <UploadDesign onImageSelected={handleImageSelected} />
-              
-              {/* Pass the selectedProfile.id to BrandProfileSelector */}
+
               <BrandProfileSelector 
                 onProfileSelected={handleProfileSelected} 
                 selectedProfileId={selectedProfile?.id} 
               />
-              
+
               <div className="flex justify-center">
                 <Button 
                   size="lg"
                   onClick={handleAnalyze}
                   disabled={!selectedFile || !selectedProfile || isAnalyzing}
-                  className="w-full sm:w-auto min-w-[200px] gap-2"
+                  className="w-full sm:w-auto min-w-[200px] text-sm sm:text-base gap-2"
                 >
                   {isAnalyzing ? (
                     <>
@@ -144,7 +132,7 @@ const Index = () => {
                   )}
                 </Button>
               </div>
-              
+
               {analysisError && (
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
                   <p className="font-medium">Error analyzing image:</p>
@@ -152,7 +140,7 @@ const Index = () => {
                 </div>
               )}
             </div>
-            
+
             <div>
               {analysisResult ? (
                 <AnalysisResults result={analysisResult} />
@@ -175,7 +163,7 @@ const Index = () => {
           </div>
         </div>
       </div>
-      
+
       <footer className="py-4 px-6 border-t border-border bg-white">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
