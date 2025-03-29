@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription
 } from '../components/ui/card';
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger
 } from '../components/ui/tabs';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Button } from '../components/ui/button';
 import { Separator } from '../components/ui/separator';
 import { Slider } from '../components/ui/slider';
-import { 
-  Sliders, 
-  PlusCircle, 
+import {
+  Sliders,
+  PlusCircle,
   Trash2,
   Save,
   Info
@@ -35,12 +35,12 @@ const Settings = () => {
   const [activeTab, setActiveTab] = useState('profiles');
   const [profiles, setProfiles] = useState<BrandProfile[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // State for creating/editing profiles
   const [editingProfile, setEditingProfile] = useState<Partial<BrandProfile> | null>(null);
-  const [newColor, setNewColor] = useState<ColorInfo>({ hex: '#000000', rgb: {r: 0, g: 0, b: 0} });
+  const [newColor, setNewColor] = useState<ColorInfo>({ hex: '#000000', rgb: { r: 0, g: 0, b: 0 } });
   const [colorName, setColorName] = useState('');
-  
+
   // Fetch profiles when the component mounts
   React.useEffect(() => {
     const fetchProfiles = async () => {
@@ -54,10 +54,10 @@ const Settings = () => {
         setLoading(false);
       }
     };
-    
+
     fetchProfiles();
   }, []);
-  
+
   const createNewProfile = () => {
     setEditingProfile({
       name: '',
@@ -65,43 +65,43 @@ const Settings = () => {
       colors: []
     });
   };
-  
+
   const handleAddColor = () => {
     if (!colorName.trim()) {
       toast.error('Please enter a color name');
       return;
     }
-    
+
     if (!editingProfile) return;
-    
+
     const newBrandColor = {
       name: colorName,
       hex: newColor.hex,
       rgb: { ...newColor.rgb }
     };
-    
+
     setEditingProfile({
       ...editingProfile,
       colors: [...(editingProfile.colors || []), newBrandColor]
     });
-    
+
     // Reset the form
     setColorName('');
-    setNewColor({ hex: '#000000', rgb: {r: 0, g: 0, b: 0} });
+    setNewColor({ hex: '#000000', rgb: { r: 0, g: 0, b: 0 } });
   };
-  
+
   const handleRemoveColor = (index: number) => {
     if (!editingProfile || !editingProfile.colors) return;
-    
+
     const updatedColors = [...editingProfile.colors];
     updatedColors.splice(index, 1);
-    
+
     setEditingProfile({
       ...editingProfile,
       colors: updatedColors
     });
   };
-  
+
   const handleColorHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hex = e.target.value;
     // Simple regex to validate hex color
@@ -110,7 +110,7 @@ const Settings = () => {
       const r = parseInt(hex.substring(1, 3), 16);
       const g = parseInt(hex.substring(3, 5), 16);
       const b = parseInt(hex.substring(5, 7), 16);
-      
+
       setNewColor({
         hex,
         rgb: { r, g, b }
@@ -122,13 +122,13 @@ const Settings = () => {
       });
     }
   };
-  
+
   const handleSaveProfile = async () => {
     if (!editingProfile || !editingProfile.name || !editingProfile.colors || editingProfile.colors.length === 0) {
       toast.error('Please fill out all required fields');
       return;
     }
-    
+
     try {
       if (editingProfile.id) {
         // Update existing profile
@@ -139,11 +139,11 @@ const Settings = () => {
         await DataService.createBrandProfile(editingProfile as Omit<BrandProfile, 'id'>);
         toast.success('Profile created successfully');
       }
-      
+
       // Refresh the profiles list
       const updatedProfiles = await DataService.getBrandProfiles();
       setProfiles(updatedProfiles);
-      
+
       // Reset the editing state
       setEditingProfile(null);
     } catch (error) {
@@ -151,16 +151,29 @@ const Settings = () => {
       toast.error('Failed to save profile');
     }
   };
-  
+
+  //Deleting and refreshing the profiles after deletion
+  const refreshProfiles = async () => {
+    const updatedProfiles = await DataService.getBrandProfiles();
+    setProfiles(updatedProfiles);
+  }
+  const handleDeleteProfile = async (id: string) => {
+    if (confirm("Are you sure you want to delete this profile?")) {
+      await DataService.deleteBrandProfile(id);
+      toast.success("Profile deleted successfully");
+      refreshProfiles();
+    }
+  }
+
   return (
     <main className="min-h-screen flex flex-col bg-muted/30 -m-8 -mr-64 -ml-64">
-      <Header 
-        title="Settings" 
+      <Header
+        title="Settings"
         subtitle="Configure app settings and brand profiles"
         backLink="/"
         backLabel="Back to Analyzer"
       />
-      
+
       <div className="flex-grow p-4 sm:p-6">
         <div className="max-w-4xl mx-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -174,7 +187,7 @@ const Settings = () => {
                 <span>About</span>
               </TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="profiles" className="space-y-6">
               {editingProfile ? (
                 <Card>
@@ -186,7 +199,7 @@ const Settings = () => {
                       Configure a brand profile with your official colors and tolerance settings
                     </CardDescription>
                   </CardHeader>
-                  
+
                   <CardContent className="space-y-6">
                     <div className="space-y-3">
                       <Label htmlFor="profileName">Profile Name</Label>
@@ -194,35 +207,35 @@ const Settings = () => {
                         id="profileName"
                         placeholder="e.g., Brand Name"
                         value={editingProfile.name || ''}
-                        onChange={(e) => setEditingProfile({...editingProfile, name: e.target.value})}
+                        onChange={(e) => setEditingProfile({ ...editingProfile, name: e.target.value })}
                       />
                     </div>
-                    
+
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <Label htmlFor="tolerance">Color Tolerance (ΔE)</Label>
                         <span className="text-sm">{editingProfile.tolerance?.toFixed(1) || '3.0'}</span>
                       </div>
-                      
+
                       <Slider
                         id="tolerance"
                         min={0.5}
                         max={10}
                         step={0.5}
                         value={[editingProfile.tolerance || 3.0]}
-                        onValueChange={(value) => setEditingProfile({...editingProfile, tolerance: value[0]})}
+                        onValueChange={(value) => setEditingProfile({ ...editingProfile, tolerance: value[0] })}
                       />
-                      
+
                       <p className="text-xs text-muted-foreground">
                         Recommended: 2.0 for strict matching, 5.0 for more flexibility
                       </p>
                     </div>
-                    
+
                     <Separator />
-                    
+
                     <div>
                       <h3 className="text-sm font-medium mb-3">Brand Colors</h3>
-                      
+
                       {editingProfile.colors && editingProfile.colors.length > 0 ? (
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
                           {editingProfile.colors.map((color, index) => (
@@ -244,10 +257,10 @@ const Settings = () => {
                           <p className="text-muted-foreground">No colors added yet</p>
                         </div>
                       )}
-                      
+
                       <div className="space-y-4 bg-muted/20 p-4 rounded-lg">
                         <h4 className="text-sm font-medium">Add New Color</h4>
-                        
+
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="colorName">Color Name</Label>
@@ -258,7 +271,7 @@ const Settings = () => {
                               onChange={(e) => setColorName(e.target.value)}
                             />
                           </div>
-                          
+
                           <div className="space-y-2">
                             <Label htmlFor="colorHex">Color Hex Code</Label>
                             <div className="flex items-center gap-3">
@@ -268,14 +281,14 @@ const Settings = () => {
                                 value={newColor.hex}
                                 onChange={handleColorHexChange}
                               />
-                              <div 
+                              <div
                                 className="h-9 w-9 rounded border"
                                 style={{ backgroundColor: newColor.hex }}
                               />
                             </div>
                           </div>
                         </div>
-                        
+
                         <Button
                           variant="secondary"
                           className="w-full sm:w-auto"
@@ -285,17 +298,18 @@ const Settings = () => {
                         </Button>
                       </div>
                     </div>
-                    
+
                     <div className="flex justify-end gap-3 mt-6">
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        className='cursor-pointer'
+                        variant="outline"
                         onClick={() => setEditingProfile(null)}
                       >
                         Cancel
                       </Button>
-                      <Button 
+                      <Button
                         onClick={handleSaveProfile}
-                        className="gap-2"
+                        className="gap-2 cursor-pointer"
                       >
                         <Save className="h-4 w-4" />
                         <span>Save Profile</span>
@@ -311,7 +325,7 @@ const Settings = () => {
                       <span>New Profile</span>
                     </Button>
                   </div>
-                  
+
                   {loading ? (
                     <Card className="flex justify-center items-center py-16">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
@@ -342,20 +356,31 @@ const Settings = () => {
                                   Tolerance: ΔE {profile.tolerance.toFixed(1)}
                                 </CardDescription>
                               </div>
-                              <Button 
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setEditingProfile(profile)}
-                              >
-                                Edit
-                              </Button>
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className='cursor-pointer'
+                                  onClick={() => setEditingProfile(profile)}
+                                >
+                                  Edit
+                                </Button>
+                                <Button
+                                  className='cursor-pointer'
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => handleDeleteProfile(profile.id)}
+                                >
+                                  Delete
+                                </Button>
+                              </div>
                             </div>
                           </CardHeader>
-                          
+
                           <CardContent>
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                               {profile.colors.map((color, index) => (
-                                <ColorCard 
+                                <ColorCard
                                   key={index}
                                   color={color}
                                   size="sm"
@@ -370,7 +395,7 @@ const Settings = () => {
                 </>
               )}
             </TabsContent>
-            
+
             <TabsContent value="account">
               <Card>
                 <CardHeader>
@@ -379,15 +404,15 @@ const Settings = () => {
                     Learn more about this application and how to integrate with backend services
                   </CardDescription>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-6">
                   <div className="space-y-2">
                     <h3 className="text-base font-medium">Application Version</h3>
                     <p className="text-sm text-muted-foreground">v1.0.0</p>
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div className="space-y-2">
                     <h3 className="text-base font-medium">Database Integration</h3>
                     <p className="text-sm text-muted-foreground">
@@ -396,24 +421,24 @@ const Settings = () => {
                       for implementation details and database schema suggestions.
                     </p>
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div className="space-y-2">
                     <h3 className="text-base font-medium">API Documentation</h3>
                     <p className="text-sm text-muted-foreground">
                       For backend integration, you can implement the following API endpoints:
                     </p>
-                    
+
                     <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground pl-4 mt-2">
                       <li><code className="font-mono text-xs">/api/brands</code> - CRUD operations for brand profiles</li>
                       <li><code className="font-mono text-xs">/api/analysis</code> - Create and retrieve analysis results</li>
                       <li><code className="font-mono text-xs">/api/extract-colors</code> - Extract colors from uploaded images</li>
                     </ul>
                   </div>
-                  
+
                   <Separator />
-                  
+
                   <div className="space-y-2">
                     <h3 className="text-base font-medium">Credits</h3>
                     <p className="text-sm text-muted-foreground">
@@ -427,7 +452,7 @@ const Settings = () => {
           </Tabs>
         </div>
       </div>
-      
+
       <footer className="py-4 px-6 border-t border-border bg-white">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
