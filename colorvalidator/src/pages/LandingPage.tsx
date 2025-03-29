@@ -8,7 +8,7 @@ import Footer from "../components/Footer"
 
 export const LandingPage = () => {
     return (
-        <div className="-m-6 sm:-m-14">
+        <div className="-m-6 -ml-44 -mr-44 sm:-m-14">
             <div className="w-full flex flex-col bg-background text-foreground">
                 <LogoHeader />
 
