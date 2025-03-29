@@ -6,26 +6,17 @@ const app = express();
 const PORT = 3000;
 const prisma = new PrismaClient();
 app.use(express.json());
-
 //@ts-ignore
-// const allowCors = (fn : any) => async (req , res) => {
-//   res.setHeader("Access-Control-Allow-Credentials", "true");
-//   res.setHeader("Access-Control-Allow-Origin", "*"); // Change this to your frontend URL if needed
-//   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
-//   );
+app.use(cors({ 
+  origin: "https://color-validator.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],  
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true  
+}));
 
-//   if (req.method === "OPTIONS") {
-//     res.status(200).end();
-//     return;
-//   }
-//   return await fn(req, res);
-// };
 //Creating new profile
 
-app.post("/profiles", async (req: any, res: any) => {
+app.post("/profiles", async (req, res) => {
   const { name, tolerance, colors } = req.body;
   try {
     const profile = await prisma.brandProfile.create({
