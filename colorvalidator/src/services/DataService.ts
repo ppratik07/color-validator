@@ -46,6 +46,11 @@ export const DataService = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updates),
     });
+  
+    if (!res.ok) {
+      throw new Error(`Failed to update profile: ${res.statusText}`);
+    }
+  
     return res.json();
   },
   async deleteBrandProfile(id: string): Promise<boolean> {
