@@ -1,138 +1,90 @@
-🎨 ColorValidator
-ColorValidator is a tool designed to manage and validate brand color profiles by comparing color tolerances using ΔE (Delta E) values. It helps ensure color consistency across different profiles and platforms.
+# ColorValidator
 
-🚀 Features
-✅ Brand Profile Management – Create, edit, and delete brand profiles.
-✅ Color Validation – Compare colors based on ΔE tolerance levels.
-✅ Profile Selection – Easily switch between different brand profiles.
-✅ Real-Time Updates – Ensures accurate color data with instant validation.
-✅ Database-Backed Storage – Uses PostgreSQL & Prisma for efficient data management.
+ColorValidator is a robust tool designed for validating brand color palettes. It helps ensure that colors meet specific tolerance thresholds, enabling brand consistency and quality control.
 
-🛠️ Tech Stack
-Frontend: React (TypeScript), Tailwind CSS, ShadCN UI
+## Features
+- Validate brand colors against specified tolerance levels
+- Store and manage multiple brand profiles
+- Easily update or delete color profiles
+- Intuitive UI with a seamless user experience
+- Backend powered by Prisma and PostgreSQL
 
-Backend: Node.js, Prisma ORM, PostgreSQL
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/ColorValidator.git
+   ```
+2. Navigate to the project folder:
+   ```bash
+   cd ColorValidator
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Set up environment variables in a `.env` file:
+   ```plaintext
+   DATABASE_URL=your_postgresql_database_url
+   ```
+5. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-UI Components: Lucide Icons
-
-📌 How It Works
-Select a Brand Profile – Choose a profile from the dropdown.
-
-Validate Colors – Check if colors fall within the acceptable ΔE tolerance.
-
-Manage Profiles – Edit or delete existing brand profiles.
-
-Real-Time Feedback – Get instant results based on ΔE values.
-
-📥 Installation
-Prerequisites
-Node.js (v18+)
-
-PostgreSQL
-
-Prisma CLI
-
-Git
-
-1️⃣ Clone the Repository
-bash
-Copy
-Edit
-git clone https://github.com/your-username/color-validator.git
-cd color-validator
-2️⃣ Install Dependencies
-bash
-Copy
-Edit
-npm install
-3️⃣ Set Up Environment Variables
-Create a .env file in the root directory and add:
-
-ini
-Copy
-Edit
-DATABASE_URL=postgresql://user:password@localhost:5432/colorvalidator
-PORT=5000
-4️⃣ Run Database Migrations
-bash
-Copy
-Edit
-npx prisma migrate dev --name init
-5️⃣ Start the Application
-bash
-Copy
-Edit
-npm run dev
-The app will be running at http://localhost:5000 🚀
-
-🔥 API Endpoints
-📌 Profiles
-➤ Get All Profiles
-http
-Copy
-Edit
+## API Endpoints
+### Get All Brand Profiles
+```http
 GET /profiles
-➤ Get a Single Profile
-http
-Copy
-Edit
-GET /profiles/:id
-➤ Create a Profile
-http
-Copy
-Edit
-POST /profiles
-Content-Type: application/json
+```
+**Response:**
+```json
+[
+  {
+    "id": "1234",
+    "name": "Brand A",
+    "tolerance": 3.0,
+    "colors": [
+      { "name": "Black", "hex": "#000000" }
+    ]
+  }
+]
+```
 
+### Update Brand Profile
+```http
+PUT /profiles/:id
+```
+**Payload:**
+```json
 {
-  "name": "BrandX",
+  "name": "Updated Brand",
   "tolerance": 2.5,
   "colors": [
-    { "name": "Red", "hex": "#FF0000", "rgb": { "r": 255, "g": 0, "b": 0 } }
+    { "name": "Blue", "hex": "#0000FF" }
   ]
 }
-➤ Update a Profile
-http
-Copy
-Edit
-PUT /profiles/:id
-Content-Type: application/json
+```
 
-{
-  "name": "BrandX Updated",
-  "tolerance": 3.0,
-  "colors": [
-    { "name": "Blue", "hex": "#0000FF", "rgb": { "r": 0, "g": 0, "b": 255 } }
-  ]
-}
-➤ Delete a Profile
-http
-Copy
-Edit
+### Delete Brand Profile
+```http
 DELETE /profiles/:id
-🤝 Contribution Guide
-Fork the repository
+```
 
-Create a new branch
+## Contributing
+1. Fork the repository
+2. Create a new feature branch
+   ```bash
+   git checkout -b feature-branch
+   ```
+3. Commit your changes
+   ```bash
+   git commit -m "Add new feature"
+   ```
+4. Push the changes
+   ```bash
+   git push origin feature-branch
+   ```
+5. Open a pull request
 
-bash
-Copy
-Edit
-git checkout -b feature-name
-Make your changes
-
-Commit and push your changes
-
-bash
-Copy
-Edit
-git commit -m "Added new feature"
-git push origin feature-name
-Submit a Pull Request
-
-📄 License
-This project is MIT Licensed.
-
-🎯 Want to Improve This Project?
-🔹 Feel free to open issues and PRs!
-🔹 Join the discussion and contribute!
+## License
+This project is licensed under the MIT License.
