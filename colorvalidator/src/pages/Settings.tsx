@@ -166,7 +166,7 @@ const Settings = () => {
   }
 
   return (
-    <main className="min-h-screen flex flex-col bg-muted/30 -m-8 -mr-64 -ml-64">
+    <main className="min-h-screen flex flex-col bg-muted/30 mx-auto w-full px-4">
       <Header
         title="Settings"
         subtitle="Configure app settings and brand profiles"
@@ -174,16 +174,16 @@ const Settings = () => {
         backLabel="Back to Analyzer"
       />
 
-      <div className="flex-grow p-4 sm:p-6">
-        <div className="max-w-4xl mx-auto">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <div className="flex-grow py-4 px-0 sm:px-6 w-full">
+        <div className="max-w-4xl mx-auto w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="profiles" className="flex items-center gap-2">
-                <Sliders className="h-4 w-4" />
+                <Sliders className="h-4 w-4 sm:block hidden" />
                 <span>Brand Profiles</span>
               </TabsTrigger>
               <TabsTrigger value="account" className="flex items-center gap-2">
-                <Info className="h-4 w-4" />
+                <Info className="h-4 w-4 sm:block hidden" />
                 <span>About</span>
               </TabsTrigger>
             </TabsList>
@@ -192,10 +192,10 @@ const Settings = () => {
               {editingProfile ? (
                 <Card>
                   <CardHeader>
-                    <CardTitle>
+                    <CardTitle className="text-xl">
                       {editingProfile.id ? 'Edit Profile' : 'Create New Profile'}
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-sm">
                       Configure a brand profile with your official colors and tolerance settings
                     </CardDescription>
                   </CardHeader>
@@ -237,14 +237,14 @@ const Settings = () => {
                       <h3 className="text-sm font-medium mb-3">Brand Colors</h3>
 
                       {editingProfile.colors && editingProfile.colors.length > 0 ? (
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6">
                           {editingProfile.colors.map((color, index) => (
                             <div key={index} className="relative group">
                               <ColorCard color={color} size="sm" />
                               <Button
                                 variant="destructive"
                                 size="icon"
-                                className="h-6 w-6 absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="h-6 w-6 absolute -top-2 -right-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
                                 onClick={() => handleRemoveColor(index)}
                               >
                                 <Trash2 className="h-3 w-3" />
@@ -291,7 +291,7 @@ const Settings = () => {
 
                         <Button
                           variant="secondary"
-                          className="w-full sm:w-auto"
+                          className="w-full"
                           onClick={handleAddColor}
                         >
                           Add Color
@@ -299,9 +299,9 @@ const Settings = () => {
                       </div>
                     </div>
 
-                    <div className="flex justify-end gap-3 mt-6">
+                    <div className="flex flex-col sm:flex-row sm:justify-end gap-3 mt-6">
                       <Button
-                        className='cursor-pointer'
+                        className='cursor-pointer w-full sm:w-auto'
                         variant="outline"
                         onClick={() => setEditingProfile(null)}
                       >
@@ -309,7 +309,7 @@ const Settings = () => {
                       </Button>
                       <Button
                         onClick={handleSaveProfile}
-                        className="gap-2 cursor-pointer"
+                        className="gap-2 cursor-pointer w-full sm:w-auto"
                       >
                         <Save className="h-4 w-4" />
                         <span>Save Profile</span>
@@ -319,8 +319,8 @@ const Settings = () => {
                 </Card>
               ) : (
                 <>
-                  <div className="flex justify-end mb-4">
-                    <Button onClick={createNewProfile} className="gap-2 cursor-pointer">
+                  <div className="flex justify-center sm:justify-end mb-4">
+                    <Button onClick={createNewProfile} className="gap-2 cursor-pointer w-full sm:w-auto">
                       <PlusCircle className="h-4 w-4" />
                       <span>New Profile</span>
                     </Button>
@@ -334,8 +334,8 @@ const Settings = () => {
                     <Card>
                       <CardContent className="flex flex-col items-center justify-center py-16">
                         <Sliders className="h-12 w-12 text-muted-foreground mb-4" />
-                        <h3 className="text-lg font-medium">No Brand Profiles</h3>
-                        <p className="text-muted-foreground text-center max-w-md mt-1 mb-6">
+                        <h3 className="text-lg font-medium text-center">No Brand Profiles</h3>
+                        <p className="text-muted-foreground text-center max-w-md mt-1 mb-6 px-4">
                           Create your first brand profile to start validating package colors against your brand guidelines.
                         </p>
                         <Button onClick={createNewProfile} className="gap-2">
@@ -349,10 +349,10 @@ const Settings = () => {
                       {profiles.map((profile) => (
                         <Card key={profile.id} className="overflow-hidden">
                           <CardHeader className="pb-3">
-                            <div className="flex justify-between items-start">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
                               <div>
-                                <CardTitle>{profile.name}</CardTitle>
-                                <CardDescription>
+                                <CardTitle className="text-xl">{profile.name}</CardTitle>
+                                <CardDescription className="text-sm">
                                   Tolerance: ΔE {profile.tolerance.toFixed(1)}
                                 </CardDescription>
                               </div>
@@ -378,7 +378,7 @@ const Settings = () => {
                           </CardHeader>
 
                           <CardContent>
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                               {profile.colors.map((color, index) => (
                                 <ColorCard
                                   key={index}
@@ -399,9 +399,9 @@ const Settings = () => {
             <TabsContent value="account">
               <Card>
                 <CardHeader>
-                  <CardTitle>About Smart Package Color Validator</CardTitle>
+                  <CardTitle className="text-xl">About Smart Package Color Validator</CardTitle>
                   <CardDescription>
-                    Learn more about this application and how to integrate with backend services
+                   Verify packaging colors against your brand guidelines
                   </CardDescription>
                 </CardHeader>
 
@@ -412,40 +412,6 @@ const Settings = () => {
                   </div>
 
                   <Separator />
-
-                  <div className="space-y-2">
-                    <h3 className="text-base font-medium">Database Integration</h3>
-                    <p className="text-sm text-muted-foreground">
-                      This application can be connected to a PostgreSQL database using Prisma ORM.
-                      Check the <code className="bg-muted px-1 py-0.5 rounded text-xs">src/services/mockDataService.ts</code> file
-                      for implementation details and database schema suggestions.
-                    </p>
-                  </div>
-
-                  <Separator />
-
-                  <div className="space-y-2">
-                    <h3 className="text-base font-medium">API Documentation</h3>
-                    <p className="text-sm text-muted-foreground">
-                      For backend integration, you can implement the following API endpoints:
-                    </p>
-
-                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground pl-4 mt-2">
-                      <li><code className="font-mono text-xs">/api/brands</code> - CRUD operations for brand profiles</li>
-                      <li><code className="font-mono text-xs">/api/analysis</code> - Create and retrieve analysis results</li>
-                      <li><code className="font-mono text-xs">/api/extract-colors</code> - Extract colors from uploaded images</li>
-                    </ul>
-                  </div>
-
-                  <Separator />
-
-                  <div className="space-y-2">
-                    <h3 className="text-base font-medium">Credits</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Created with React, TypeScript, and Tailwind CSS.
-                      Design inspired by modern, minimalist principles.
-                    </p>
-                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -453,7 +419,7 @@ const Settings = () => {
         </div>
       </div>
 
-      <footer className="py-4 px-6 border-t border-border bg-white">
+      <footer className="py-4 px-4 sm:px-6 border-t border-border bg-white mt-8">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
             Smart Package Color Validator
