@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -12,7 +13,18 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true  // If you're using cookies or authentication
 }));
-
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", 'https://fonts.googleapis.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+        // Add other directives as needed
+      },
+    },
+  })
+);
 //Creating new profile
 
 app.post("/profiles", async (req, res) => {

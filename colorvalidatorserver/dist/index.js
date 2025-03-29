@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
@@ -35,6 +36,16 @@ app.use((0, cors_1.default)({
     origin: 'https://color-validator.vercel.app', // Your frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // If you're using cookies or authentication
+}));
+app.use((0, helmet_1.default)({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", 'https://fonts.googleapis.com'],
+            fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+            // Add other directives as needed
+        },
+    },
 }));
 //Creating new profile
 app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
