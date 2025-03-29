@@ -1,5 +1,3 @@
-import React from "react";
-
 const AboutSection = () => {
   return (
     <section className="py-12 px-4 sm:px-6 bg-gradient-to-b from-blue-50 to-white">

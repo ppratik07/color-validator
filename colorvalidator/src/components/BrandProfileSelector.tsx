@@ -52,6 +52,7 @@ const BrandProfileSelector: React.FC<BrandProfileSelectorProps> = ({
     };
 
     fetchProfiles();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProfileId]);
 
   const handleProfileChange = (value: string) => {
