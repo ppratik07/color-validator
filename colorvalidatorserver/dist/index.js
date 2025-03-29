@@ -32,10 +32,9 @@ const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
 //@ts-ignore
 app.use((0, cors_1.default)({
-    origin: "https://color-validator.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
+    origin: 'https://color-validator.vercel.app', // Your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true // If you're using cookies or authentication
 }));
 //Creating new profile
 app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
