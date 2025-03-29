@@ -13,12 +13,29 @@ export const DataService = {
   async createBrandProfile(
     profile: Omit<BrandProfile, "id">
   ): Promise<BrandProfile> {
-    const res = await fetch('http://localhost/3000/profiles', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(profile),
-    });
-    return res.json();
+    try {
+      const res = await fetch(`${BASE_URL}/profiles`, {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        mode: 'cors',
+        credentials: 'include',
+        body: JSON.stringify(profile),
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.text();
+        throw new Error(`HTTP error! status: ${res.status}, message: ${errorData}`);
+      }
+      
+      console.log('Response:', res);
+      return res.json();
+    } catch (error) {
+      console.error('Error in createBrandProfile:', error);
+      throw error;
+    }
   },
   async updateBrandProfile(
     id: string,
