@@ -9,7 +9,7 @@ app.use(express.json());
 //@ts-ignore
 app.use(
   cors({
-    origin: "*",
+    origin: "https://color-validator.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
