@@ -27,7 +27,7 @@ const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
-const PORT = 3000;
+const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
 //@ts-ignore

@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT;
 const prisma = new PrismaClient();
 app.use(express.json());
 //@ts-ignore
