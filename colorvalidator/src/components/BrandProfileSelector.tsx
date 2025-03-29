@@ -35,16 +35,12 @@ const BrandProfileSelector: React.FC<BrandProfileSelectorProps> = ({
         // If selectedProfileId is provided, select that profile
         if (selectedProfileId) {
           const profile = fetchedProfiles.find(p => p.id === selectedProfileId);
-          if (profile) {
+          if (profile && profile.id !== selectedProfile?.id) {
             setSelectedProfile(profile);
             onProfileSelected(profile);
-          } else if (fetchedProfiles.length > 0) {
-            // Otherwise select the first profile
-            setSelectedProfile(fetchedProfiles[0]);
-            onProfileSelected(fetchedProfiles[0]);
           }
-        } else if (fetchedProfiles.length > 0) {
-          // If no profile ID is provided, select the first one
+        } else if (!selectedProfile && fetchedProfiles.length > 0) {
+          // Select the first profile only if no profile is currently selected
           setSelectedProfile(fetchedProfiles[0]);
           onProfileSelected(fetchedProfiles[0]);
         }
@@ -56,7 +52,7 @@ const BrandProfileSelector: React.FC<BrandProfileSelectorProps> = ({
     };
 
     fetchProfiles();
-  }, [selectedProfileId, onProfileSelected]);
+  }, [selectedProfileId]);
 
   const handleProfileChange = (value: string) => {
     const profile = profiles.find(p => p.id === value);
