@@ -320,7 +320,7 @@ const Settings = () => {
               ) : (
                 <>
                   <div className="flex justify-end mb-4">
-                    <Button onClick={createNewProfile} className="gap-2">
+                    <Button onClick={createNewProfile} className="gap-2 cursor-pointer">
                       <PlusCircle className="h-4 w-4" />
                       <span>New Profile</span>
                     </Button>
