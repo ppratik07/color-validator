@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { Button } from '../components/ui/button';
 import { Palette } from 'lucide-react';
 
 export const LogoHeader = () => {
     const [scrolled, setScrolled] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -36,7 +37,7 @@ export const LogoHeader = () => {
                     >
                         Sign In
                     </Button> */}
-                    <Button size="sm">Get Started</Button>
+                    <Button onClick={()=>navigate('/packaging-color')} size="sm" className='cursor-pointer'>Get Started</Button>
                 </div>
             </div>
         </header>

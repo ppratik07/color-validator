@@ -21,7 +21,7 @@ function App() {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/index" element={<Index />} />
+            <Route path="/packaging-color" element={<Index />} />
             <Route path="/" element={<LandingPage />} />
             <Route path="/history" element={<History />} />
             <Route path="/settings" element={<Settings />} />

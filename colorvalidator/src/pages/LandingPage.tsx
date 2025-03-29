@@ -28,7 +28,7 @@ export const LandingPage = () => {
                                 </p>
                                 <div className="flex flex-wrap gap-4 justify-center pt-4 animate-slide-up animation-delay-200">
                                     <Button size="lg" asChild className="bg-blue-900 hover:bg-blue-400 text-white transition-colors">
-                                        <Link to="/index">
+                                        <Link to="/packaging-color">
                                             Start Validating <ArrowRight className="ml-2 h-4 w-4" />
                                         </Link>
                                     </Button>                              
@@ -69,7 +69,7 @@ export const LandingPage = () => {
                                         <p className="text-white/80 mb-8">Start validating your packaging colors today and maintain brand consistency across all your products.</p>
                                         <div className="flex flex-wrap gap-4">
                                             <Button size="lg" variant="secondary" asChild>
-                                                <Link to="/index">Get Started <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                                                <Link to="/packaging-color">Get Started <ArrowRight className="ml-2 h-4 w-4" /></Link>
                                             </Button>
                                             <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10" asChild>
                                                 <Link to="/guidelines">Learn More</Link>
