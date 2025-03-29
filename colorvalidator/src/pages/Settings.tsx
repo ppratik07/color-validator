@@ -29,6 +29,7 @@ import Header from '../components/Header';
 import ColorCard from '../components/ColorCard';
 import { BrandProfile, ColorInfo } from '../types/types';
 import { DataService } from '../services/DataService';
+import { Link } from 'react-router-dom';
 
 const Settings = () => {
   // We'll start with the brand profiles tab by default
@@ -399,12 +400,12 @@ const Settings = () => {
             <TabsContent value="account">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-xl">About Smart Package Color Validator</CardTitle>
+                  <CardTitle className="text-xl"> <Link to='/about' className='text-blue-900 hover:text-blue-400'>About Smart Package Color Validator</Link></CardTitle>
                   <CardDescription>
-                   Verify packaging colors against your brand guidelines
+                   Verify packaging colors against your brand guidelines.
                   </CardDescription>
                 </CardHeader>
-
+            
                 <CardContent className="space-y-6">
                   <div className="space-y-2">
                     <h3 className="text-base font-medium">Application Version</h3>
