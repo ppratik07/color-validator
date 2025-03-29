@@ -52,7 +52,7 @@ const AnalysisDetails = () => {
   
   if (loading) {
     return (
-      <main className="min-h-screen flex flex-col bg-muted/30">
+      <main className="min-h-screen flex flex-col bg-muted/30 -m-8 -mr-64 -ml-64">
         <Header 
           title="Analysis Details" 
           backLink="/history"

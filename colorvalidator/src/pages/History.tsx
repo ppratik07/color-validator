@@ -101,7 +101,7 @@ const History = () => {
   };
   
   return (
-    <main className="min-h-screen flex flex-col bg-muted/30">
+    <main className="min-h-screen flex flex-col bg-muted/30 -m-8 -mr-64 -ml-64">
       <Header 
         title="Analysis History" 
         subtitle="View and manage your past color analyses"

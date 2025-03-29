@@ -1,7 +1,7 @@
 import React from "react";
 const AboutSection = () => {
     return (
-      <section className="py-16 px-6 bg-gradient-to-b from-blue-50 to-white -m-14">
+      <section className="py-16 px-6 bg-gradient-to-b from-blue-50 to-white -m-8 -mr-64 -ml-64">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-blue-900">
             About Smart Package Color Validator
