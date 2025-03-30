@@ -7,27 +7,34 @@ const app = express();
 const PORT = process.env.PORT;
 const prisma = new PrismaClient();
 app.use(express.json());
+app.options('/profiles', cors());
 //@ts-ignore
 app.use(cors({
-  origin: 'https://color-validator.vercel.app', // Your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true  // If you're using cookies or authentication
+  origin: ['https://color-validator.vercel.app', 'http://localhost:5173'], // Allow both production and development URLs
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS method
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+  credentials: true
 }));
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        styleSrc: ["'self'", 'https://fonts.googleapis.com'],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        // Add other directives as needed
-      },
-    },
-  })
-);
+
+//@ts-ignore
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://color-validator.vercel.app');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  // Handle OPTIONS method
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 //Creating new profile
 
 app.post("/profiles", async (req, res) => {
+  res.header('Access-Control-Allow-Origin', 'https://color-validator.vercel.app');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
   const { name, tolerance, colors } = req.body;
   try {
     const profile = await prisma.brandProfile.create({

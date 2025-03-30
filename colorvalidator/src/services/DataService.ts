@@ -3,7 +3,13 @@ import { BrandProfile, AnalysisHistory, AnalysisResult } from "../types/types";
 
 export const DataService = {
   async getBrandProfiles(): Promise<BrandProfile[]> {
-    const res = await fetch(`${BASE_URL}/profiles`);
+    const res = await fetch(`${BASE_URL}/profiles`, {
+      credentials: 'include',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     return res.json();
   },
   async getBrandProfileById(id: string): Promise<BrandProfile | null> {
@@ -16,12 +22,12 @@ export const DataService = {
     try {
       const res = await fetch(`${BASE_URL}/profiles`, {
         method: "POST",
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
-        mode: 'cors',
         credentials: 'include',
+        mode: 'cors',
         body: JSON.stringify(profile),
       });
       

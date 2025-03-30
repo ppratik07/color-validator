@@ -26,29 +26,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const helmet_1 = __importDefault(require("helmet"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
+app.options('/profiles', (0, cors_1.default)());
 //@ts-ignore
 app.use((0, cors_1.default)({
-    origin: 'https://color-validator.vercel.app', // Your frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true // If you're using cookies or authentication
+    origin: ['https://color-validator.vercel.app', 'http://localhost:5173'], // Allow both production and development URLs
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS method
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+    credentials: true
 }));
-app.use((0, helmet_1.default)({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            styleSrc: ["'self'", 'https://fonts.googleapis.com'],
-            fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-            // Add other directives as needed
-        },
-    },
-}));
+//@ts-ignore
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://color-validator.vercel.app');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    // Handle OPTIONS method
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
 //Creating new profile
 app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.header('Access-Control-Allow-Origin', 'https://color-validator.vercel.app');
+    res.header('Access-Control-Allow-Credentials', 'true');
     const { name, tolerance, colors } = req.body;
     try {
         const profile = yield prisma.brandProfile.create({
