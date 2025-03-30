@@ -26,30 +26,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const helmet_1 = __importDefault(require("helmet"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
-// Define CORS options
-const corsOptions = {
-    origin: 'https://color-validator.vercel.app',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
-    credentials: true,
-    preflightContinue: false,
-    optionsSuccessStatus: 204
-};
-// Apply CORS before any other middleware
-app.use((0, cors_1.default)(corsOptions));
-// Remove the helmet CSP for now to rule out any interference
-app.use((0, helmet_1.default)({
-    contentSecurityPolicy: false
+// Remove all other middleware temporarily and just focus on CORS and JSON parsing
+app.use(express_1.default.json());
+// Simple CORS configuration
+app.use((0, cors_1.default)({
+    origin: true, // This will reflect the request origin
+    credentials: false // Set to false if you're not using cookies/auth
 }));
 app.use(express_1.default.json());
-// Add a general preflight handler
-app.options('*', (0, cors_1.default)(corsOptions));
 // Your existing routes with simplified CORS handling
 app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Add CORS headers explicitly for this route
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'POST');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
     const { name, tolerance, colors } = req.body;
     try {
         const profile = yield prisma.brandProfile.create({
@@ -167,4 +160,8 @@ app.post("/analysis", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(400).json({ error: "Failed to save analysis result" });
     }
 }));
+app.get("/test", (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.json({ message: "Server is running" });
+});
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

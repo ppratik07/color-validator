@@ -23,11 +23,10 @@ export const DataService = {
       const res = await fetch(`${BASE_URL}/profiles`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
+          "Content-Type": "application/json"
         },
-        credentials: 'include',
-        mode: 'cors',
+        mode: 'cors', // Keep this
+        // Remove credentials: 'include'
         body: JSON.stringify(profile),
       });
       
