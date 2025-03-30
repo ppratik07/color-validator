@@ -26,34 +26,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
-app.use(express_1.default.json());
-app.options('/profiles', (0, cors_1.default)());
-//@ts-ignore
-app.use((0, cors_1.default)({
-    origin: ['https://color-validator.vercel.app', 'http://localhost:5173'], // Allow both production and development URLs
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS method
-    allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-    credentials: true
+// Define CORS options
+const corsOptions = {
+    origin: 'https://color-validator.vercel.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+};
+// Apply CORS before any other middleware
+app.use((0, cors_1.default)(corsOptions));
+// Remove the helmet CSP for now to rule out any interference
+app.use((0, helmet_1.default)({
+    contentSecurityPolicy: false
 }));
-//@ts-ignore
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://color-validator.vercel.app');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    // Handle OPTIONS method
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-});
-//Creating new profile
+app.use(express_1.default.json());
+// Add a general preflight handler
+app.options('*', (0, cors_1.default)(corsOptions));
+// Your existing routes with simplified CORS handling
 app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.header('Access-Control-Allow-Origin', 'https://color-validator.vercel.app');
-    res.header('Access-Control-Allow-Credentials', 'true');
     const { name, tolerance, colors } = req.body;
     try {
         const profile = yield prisma.brandProfile.create({

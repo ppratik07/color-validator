@@ -6,35 +6,32 @@ import helmet from "helmet";
 const app = express();
 const PORT = process.env.PORT;
 const prisma = new PrismaClient();
-app.use(express.json());
-app.options('/profiles', cors());
-//@ts-ignore
-app.use(cors({
-  origin: ['https://color-validator.vercel.app', 'http://localhost:5173'], // Allow both production and development URLs
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include OPTIONS method
-  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-  credentials: true
+
+// Define CORS options
+const corsOptions = {
+  origin: 'https://color-validator.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+// Apply CORS before any other middleware
+app.use(cors(corsOptions));
+
+// Remove the helmet CSP for now to rule out any interference
+app.use(helmet({
+  contentSecurityPolicy: false
 }));
 
-//@ts-ignore
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://color-validator.vercel.app');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
-  // Handle OPTIONS method
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-  next();
-});
-//Creating new profile
+app.use(express.json());
 
+// Add a general preflight handler
+app.options('*', cors(corsOptions));
+
+// Your existing routes with simplified CORS handling
 app.post("/profiles", async (req, res) => {
-  res.header('Access-Control-Allow-Origin', 'https://color-validator.vercel.app');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
   const { name, tolerance, colors } = req.body;
   try {
     const profile = await prisma.brandProfile.create({

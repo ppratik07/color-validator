@@ -32,11 +32,10 @@ export const DataService = {
       });
       
       if (!res.ok) {
-        const errorData = await res.text();
-        throw new Error(`HTTP error! status: ${res.status}, message: ${errorData}`);
+        const errorText = await res.text();
+        throw new Error(`HTTP error! status: ${res.status}, message: ${errorText}`);
       }
       
-      console.log('Response:', res);
       return res.json();
     } catch (error) {
       console.error('Error in createBrandProfile:', error);
