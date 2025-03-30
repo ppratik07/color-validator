@@ -163,5 +163,6 @@ app.post("/analysis", (req, res) => __awaiter(void 0, void 0, void 0, function* 
 app.get("/test", (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.json({ message: "Server is running" });
+    console.log("Server is running");
 });
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
