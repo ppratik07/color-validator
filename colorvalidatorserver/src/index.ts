@@ -151,6 +151,7 @@ app.post("/analysis", async (req, res) => {
 app.get("/test", (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.json({ message: "Server is running" });
+  console.log("Server is running");
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
