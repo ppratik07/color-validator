@@ -30,7 +30,7 @@ const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
 app.use((0, cors_1.default)({
-    origin: "https://color-validator.vercel.app", // Your frontend URL
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
