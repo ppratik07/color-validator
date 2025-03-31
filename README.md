@@ -80,7 +80,10 @@ PUT /profiles/:id
 ```http
 DELETE /profiles/:id
 ```
-
+## Deployment 
+   Frontend - Vercel
+   Backend - Render
+   
 ## Contributing
 1. Fork the repository
 2. Create a new feature branch
