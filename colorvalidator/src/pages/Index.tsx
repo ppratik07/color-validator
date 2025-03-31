@@ -95,13 +95,13 @@ const Index = () => {
   }, [selectedProfile]);
 
   return (
-    <main className="min-h-screen flex flex-col bg-muted/30 px-4 sm:px-8">
+    <main className="min-h-screen flex flex-col bg-muted/30 px-4 sm:px-8 ">
       <Header 
         title="Smart Package Color Validator" 
         subtitle="Upload a design and analyze color compliance"
       />
 
-      <div className="flex-grow py-6">
+      <div className="flex-grow py-6 ">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
             <div className="space-y-6">
