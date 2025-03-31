@@ -29,10 +29,8 @@ const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
-// Remove all other middleware temporarily and just focus on CORS and JSON parsing
-app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: "*",
+    origin: "https://color-validator.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: [
@@ -44,10 +42,8 @@ app.use((0, cors_1.default)({
     ],
 }));
 app.use(express_1.default.json());
+app.options('*', (0, cors_1.default)());
 app.post("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'POST');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
     const { name, tolerance, colors } = req.body;
     try {
         const profile = yield prisma.brandProfile.create({
@@ -110,9 +106,6 @@ app.delete("/profiles/:id", (req, res) => __awaiter(void 0, void 0, void 0, func
 // Get all brand profiles with their colors
 //@ts-ignore
 app.get("/profiles", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
     try {
         const profiles = yield prisma.brandProfile.findMany({
             include: {
