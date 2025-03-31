@@ -92,17 +92,29 @@ app.delete("/profiles/:id", async (req, res) => {
 
 //get all profile
 // Get all brand profiles with their colors
+//@ts-ignore
 app.get("/profiles", async (req, res) => {
   try {
     const profiles = await prisma.brandProfile.findMany({
       include: {
-        colors: true, // Include associated colors
+        colors: true,
       },
     });
-    console.log(profiles);
-    res.json(profiles);
+    
+    // Add error checking for the profiles data
+    if (!profiles) {
+      return res.status(404).json({ error: "No profiles found" });
+    }
+    
+    // Ensure we're sending an array, even if empty
+    res.json(Array.isArray(profiles) ? profiles : []);
+    
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch brand profiles" });
+    console.error("Error fetching profiles:", error); // Add error logging
+    res.status(500).json({ 
+      error: "Failed to fetch brand profiles",
+      details: error instanceof Error ? error.message : "Unknown error"
+    });
   }
 });
 
