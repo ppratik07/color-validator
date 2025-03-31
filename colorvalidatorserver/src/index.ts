@@ -1,14 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 import cors from "cors";
-import helmet from "helmet";
 
 const app = express();
 const PORT = process.env.PORT;
 const prisma = new PrismaClient();
 
 app.use(cors({
-  origin: "https://color-validator.vercel.app", // Your frontend URL
+  origin: process.env.FRONTEND_URL, 
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
