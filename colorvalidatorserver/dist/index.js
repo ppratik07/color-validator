@@ -31,10 +31,17 @@ const PORT = process.env.PORT;
 const prisma = new client_1.PrismaClient();
 // Remove all other middleware temporarily and just focus on CORS and JSON parsing
 app.use(express_1.default.json());
-// Simple CORS configuration
 app.use((0, cors_1.default)({
-    origin: true, // This will reflect the request origin
-    credentials: false // Set to false if you're not using cookies/auth
+    origin: "https://color-validator.vercel.app", // Allow only your frontend
+    credentials: true, // Allow credentials (cookies, authentication headers, etc.)
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allowed HTTP methods
+    allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+        "X-Requested-With",
+        "Accept",
+        "Origin",
+    ],
 }));
 app.use(express_1.default.json());
 // Your existing routes with simplified CORS handling
