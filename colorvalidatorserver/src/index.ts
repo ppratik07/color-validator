@@ -12,9 +12,9 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://color-validator.vercel.app", // Allow only your frontend
-    credentials: true, // Allow credentials (cookies, authentication headers, etc.)
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Allowed HTTP methods
+    origin: "*",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], 
     allowedHeaders: [
       "Content-Type",
       "Authorization",
@@ -26,10 +26,7 @@ app.use(
 );
 app.use(express.json());
 
-
-// Your existing routes with simplified CORS handling
 app.post("/profiles", async (req, res) => {
-  // Add CORS headers explicitly for this route
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'POST');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -94,6 +91,9 @@ app.delete("/profiles/:id", async (req, res) => {
 // Get all brand profiles with their colors
 //@ts-ignore
 app.get("/profiles", async (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
   try {
     const profiles = await prisma.brandProfile.findMany({
       include: {
